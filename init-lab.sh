@@ -75,8 +75,9 @@ resource "azurerm_dashboard_grafana" "grafana" {
   name                = var.grafana_name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
-  sku_name            = "Standard"
-  public_network_access_type = "Enabled"
+  grafana_major_version = 10
+  sku            = "Standard"
+  public_network_access_enabled = "Enabled"
 }
 EOF
 
