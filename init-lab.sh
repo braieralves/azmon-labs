@@ -10,6 +10,15 @@ read LOCATION
 echo "Enter the name for the Log Analytics Workspace:"
 read WORKSPACE_NAME
 
+# Get the Azure Subscription ID from the environment (specific to Azure Cloud Shell)
+SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+
+# Check if subscription_id was retrieved successfully
+if [ -z "$SUBSCRIPTION_ID" ]; then
+    echo "Error: Could not retrieve Azure subscription ID."
+    exit 1
+fi
+
 # Create terraform.tfvars file with user input
 cat <<EOF > terraform.tfvars
 resource_group_name = "$RESOURCE_GROUP"
@@ -17,13 +26,16 @@ location            = "$LOCATION"
 workspace_name      = "$WORKSPACE_NAME"
 EOF
 
-# Terraform configuration
-cat <<EOF > main.tf
-# Provider configuration for Azure
+# Create provider.tf file with subscription_id
+cat <<EOF > provider.tf
 provider "azurerm" {
   features {}
+  subscription_id = "$SUBSCRIPTION_ID"
 }
+EOF
 
+# Terraform configuration for the resources
+cat <<EOF > main.tf
 # Resource group creation
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
