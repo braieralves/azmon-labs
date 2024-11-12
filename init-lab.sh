@@ -134,7 +134,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
-  azure_monitor_metrics {
+  monitor_metrics {
     enabled                         = true
     workspace_id                    = azurerm_monitor_workspace.prometheus.id
     grafana_integration_enabled     = true
