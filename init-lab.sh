@@ -54,6 +54,30 @@ resource "azurerm_resource_group" "rg" {
   location = var.location
 }
 
+# Log Analytics Workspace creation
+resource "azurerm_log_analytics_workspace" "law" {
+  name                = var.workspace_name
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
+# Azure Monitor Workspace (Managed Prometheus) creation
+resource "azurerm_monitor_workspace" "prometheus" {
+  name                = var.prometheus_name
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+# Managed Grafana creation
+resource "azurerm_dashboard_grafana" "grafana" {
+  name                = var.grafana_name
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg.name
+  sku_name            = "Standard"
+  public_network_access_type = "Enabled"
+}
 EOF
 
 # Define variables for the Terraform configuration
