@@ -115,7 +115,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   name                = var.aks_name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
-  dns_prefix          = "aks${var.aks_name}"
+  dns_prefix          = "akslab"
 
   default_node_pool {
     name       = "default"
