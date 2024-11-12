@@ -19,6 +19,8 @@ if [ -z "$SUBSCRIPTION_ID" ]; then
     exit 1
 fi
 
+echo SUBSCRIPTION_ID
+
 # Create terraform.tfvars file with user input
 cat <<EOF > terraform.tfvars
 resource_group_name = "$RESOURCE_GROUP"
