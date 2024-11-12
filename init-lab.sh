@@ -109,6 +109,38 @@ resource "azurerm_dashboard_grafana" "grafana" {
   sku            = "Standard"
   public_network_access_enabled = true
 }
+
+# AKS Cluster creation with monitoring enabled
+resource "azurerm_kubernetes_cluster" "aks" {
+  name                = var.aks_name
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg.name
+  dns_prefix          = "aks${var.aks_name}"
+
+  default_node_pool {
+    name       = "default"
+    node_count = 1
+    vm_size    = "Standard_DS2_v2"
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  addon_profile {
+    oms_agent {
+      enabled                    = true
+      log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
+    }
+  }
+
+  azure_monitor_metrics {
+    enabled                         = true
+    workspace_id                    = azurerm_monitor_workspace.prometheus.id
+    grafana_integration_enabled     = true
+    grafana_workspace_id            = azurerm_dashboard_grafana.grafana.id
+  }
+}
 EOF
 
 # Define variables for the Terraform configuration
