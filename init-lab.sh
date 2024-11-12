@@ -1,5 +1,35 @@
 #!/bin/bash
 
+# Function to register a provider if not already registered
+register_provider() {
+  local provider_namespace=$1
+  local registration_status
+
+  # Check the current registration status of the provider
+  registration_status=$(az provider show --namespace "$provider_namespace" --query "registrationState" -o tsv)
+
+  if [ "$registration_status" != "Registered" ]; then
+    echo "Registering $provider_namespace provider..."
+    az provider register --namespace "$provider_namespace"
+
+    # Wait until the provider is registered
+    while [ "$(az provider show --namespace "$provider_namespace" --query "registrationState" -o tsv)" != "Registered" ]; do
+      echo "Waiting for $provider_namespace provider registration..."
+      sleep 5
+    done
+    echo "$provider_namespace provider registered successfully."
+  else
+    echo "$provider_namespace provider is already registered."
+  fi
+}
+
+# Register required providers
+register_provider "Microsoft.Insights"
+register_provider "Microsoft.OperationalInsights"
+register_provider "Microsoft.SecurityInsights"
+register_provider "Microsoft.Monitor"
+register_provider "Microsoft.Dashboard"
+
 # Prompt for user inputs
 echo "Enter the name for the Azure resource group:"
 read RESOURCE_GROUP
