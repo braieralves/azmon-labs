@@ -123,6 +123,13 @@ resource "azurerm_role_assignment" "grafanarole" {
   principal_id = azurerm_dashboard_grafana.grafana.identity[0].principal_id
 }
 
+# Add role assignment to Grafana so an admin user can log in
+resource "azurerm_role_assignment" "grafana-admin" {
+  scope                = azurerm_dashboard_grafana.grafana.id
+  role_definition_name = "Grafana Admin"
+  principal_id         = var.adminGroupObjectIds[0]
+}
+
 # Output the grafana url for usability
 output "grafana_url" {
   value = azurerm_dashboard_grafana.grafana.endpoint
@@ -156,6 +163,12 @@ EOF
 
 # Define variables for the Terraform configuration
 cat <<EOF > variables.tf
+variable "adminGroupObjectIds" {
+  type        = list(string)
+  description = "A list of Object IDs of Azure Active Directory Groups which should have Admin Role on the Cluster"
+  default     = []
+}
+
 variable "resource_group_name" {
   description = "Name of the Azure resource group"
   type        = string
