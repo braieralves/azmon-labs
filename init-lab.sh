@@ -108,6 +108,10 @@ resource "azurerm_dashboard_grafana" "grafana" {
   grafana_major_version = 10
   sku            = "Standard"
   public_network_access_enabled = true
+
+  identity {
+    type = "SystemAssigned"
+  }
 }
 
 # AKS Cluster creation with monitoring enabled
