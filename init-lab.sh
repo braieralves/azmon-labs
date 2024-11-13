@@ -23,6 +23,15 @@ register_provider() {
   fi
 }
 
+# Function to prompt and validate non-empty input
+prompt_input() {
+  local prompt_msg=$1
+  local var_name=$2
+  while [ -z "${!var_name}" ]; do
+    read -p "$prompt_msg: " $var_name
+  done
+}
+
 # Register required providers
 register_provider "Microsoft.Insights"
 register_provider "Microsoft.OperationalInsights"
@@ -30,24 +39,13 @@ register_provider "Microsoft.SecurityInsights"
 register_provider "Microsoft.Monitor"
 register_provider "Microsoft.Dashboard"
 
-# Prompt for user inputs
-echo "Enter the name for the Azure resource group:"
-read RESOURCE_GROUP
-
-echo "Enter the Azure location (e.g., East US):"
-read LOCATION
-
-echo "Enter the name for the Log Analytics Workspace:"
-read WORKSPACE_NAME
-
-echo "Enter the AKS cluster name:"
-read AKS_NAME
-
-echo "Enter the Managed Prometheus workspace name:"
-read PROMETHEUS_NAME
-
-echo "Enter the Managed Grafana name:"
-read GRAFANA_NAME
+# Use the function to prompt for required inputs
+prompt_input "Enter the name for the Azure resource group" RESOURCE_GROUP
+prompt_input "Enter the Azure location (e.g., East US)" LOCATION
+prompt_input "Enter the name for the Log Analytics Workspace" WORKSPACE_NAME
+prompt_input "Enter the AKS cluster name" AKS_NAME
+prompt_input "Enter the Managed Prometheus workspace name" PROMETHEUS_NAME
+prompt_input "Enter the Managed Grafana name" GRAFANA_NAME
 
 # Get Azure Subscription ID from Azure Cloud Shell environment
 SUBSCRIPTION_ID=$(az account show --query id -o tsv)
