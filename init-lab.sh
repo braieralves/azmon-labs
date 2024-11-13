@@ -164,7 +164,7 @@ cat <<EOF > variables.tf
 variable "adminGroupObjectIds" {
   type        = list(string)
   description = "A list of Object IDs of Azure Active Directory Groups which should have Admin Role on the Cluster"
-  default     = []
+  default     = ["ddaf1c7b-cf0d-49a1-9345-ebf87efd401f"]
 }
 
 variable "resource_group_name" {
