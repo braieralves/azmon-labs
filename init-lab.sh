@@ -108,10 +108,24 @@ resource "azurerm_dashboard_grafana" "grafana" {
   grafana_major_version = 10
   sku            = "Standard"
   public_network_access_enabled = true
-
   identity {
     type = "SystemAssigned"
   }
+  azure_monitor_workspace_integrations {
+    resource_id = azurerm_monitor_workspace.prometheus.id
+  }
+}
+
+# Add required role assignment over resource group containing the Azure Monitor Workspace
+resource "azurerm_role_assignment" "grafana" {
+  scope                = azurerm_resource_group.default.id
+  role_definition_name = "Monitoring Reader"
+  principal_id         = azurerm_dashboard_grafana.grafana.identity[0].principal_id
+}
+
+# Output the grafana url for usability
+output "grafana_url" {
+  value = azurerm_dashboard_grafana.grafana.endpoint
 }
 
 # AKS Cluster creation with monitoring enabled
@@ -129,6 +143,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   identity {
     type = "SystemAssigned"
+  }
+
+  monitor_metrics {
+    annotations_allowed = null
+    labels_allowed      = null
   }
 }
 
