@@ -118,7 +118,7 @@ resource "azurerm_dashboard_grafana" "grafana" {
 
 # Add required role assignment over resource group containing the Azure Monitor Workspace
 resource "azurerm_role_assignment" "grafana" {
-  scope                = azurerm_resource_group.default.id
+  scope                = azurerm_resource_group.grafana.id
   role_definition_name = "Monitoring Reader"
   principal_id         = azurerm_dashboard_grafana.grafana.identity[0].principal_id
 }
