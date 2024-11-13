@@ -126,24 +126,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
   identity {
     type = "SystemAssigned"
   }
-
 }
 
-resource "null_resource" "aks_monitor_update" {
-  provisioner "local-exec" {
-    command = <<EOT
-      # Retrieve required IDs
-      workspaceId=$(az monitor log-analytics workspace show --resource-group ${azurerm_resource_group.rg.name} --workspace-name ${azurerm_log_analytics_workspace.law.name} --query id -o tsv)
-      prometheusId=$(az monitor account show --resource-group ${azurerm_resource_group.rg.name} --name ${azurerm_monitor_workspace.prometheus.name} --query id -o tsv)
-      grafanaId=$(az grafana show --resource-group ${azurerm_resource_group.rg.name} --name ${azurerm_dashboard_grafana.grafana.name} --query id -o tsv)
 
-      # Update AKS for Prometheus and Grafana
-      az aks update --enable-azure-monitor-metrics --name ${azurerm_kubernetes_cluster.aks.name} --resource-group ${azurerm_resource_group.rg.name} --azure-monitor-workspace-resource-id $prometheusId --grafana-resource-id $grafanaId
-    EOT
-  }
-
-  depends_on = [azurerm_kubernetes_cluster.aks]
-}
 EOF
 
 # Define variables for the Terraform configuration
