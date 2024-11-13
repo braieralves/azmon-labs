@@ -127,19 +127,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
     type = "SystemAssigned"
   }
 
-  enable_azure_monitor_logs = true
-  enable_azure_monitor_metrics = true
-  
-  azure_monitor {
-    enabled = true
-    workspace_resource_id = azurerm_monitor_workspace.prometheus.id
-  }
-
-  addon_profile {
-    oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
-    }
+   # Enable Azure Monitor metrics for Prometheus and link to Grafana
+  azure_monitor_metrics {
+    enabled                          = true
+    workspace_resource_id            = var.azurerm_monitor_workspace
+    grafana_workspace_resource_id    = var.azurerm_dashboard_grafana
   }
 
 }
