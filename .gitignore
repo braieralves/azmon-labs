@@ -1,17 +1,3 @@
-# Terraform state
 *.tfstate
-*.tfstate.*
-crash.log
-*.tfplan
-terraform.tfvars
-override.tf
-override.tf.json
-*_override.tf
-*_override.tf.json
-
-# CLI local config
+*.tfvars
 .terraform/
-.terraform.lock.hcl
-
-# VS Code config (optional)
-.vscode/
