@@ -14,6 +14,18 @@
 
 set -e
 
+# Clone the repo (skip if already cloned)
+if [ ! -d "azmon-labs" ]; then
+  echo "Cloning azmon-labs repository..."
+  git clone https://github.com/tiagojfernandes/azmon-labs.git
+fi
+
+# Change to environment folder
+cd azmon-labs/terraform/environments/default || {
+  echo "Error: Terraform environment folder not found."
+  exit 1
+}
+
 # -------------------------------
 # Functions
 # -------------------------------
