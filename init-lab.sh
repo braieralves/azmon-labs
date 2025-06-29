@@ -20,11 +20,14 @@ if [ ! -d "azmon-labs" ]; then
   git clone https://github.com/tiagojfernandes/azmon-labs.git
 fi
 
+/*
 # Change to environment folder
 cd azmon-labs/terraform/environments/default || {
   echo "Error: Terraform environment folder not found."
   exit 1
 }
+
+*/
 
 # -------------------------------
 # Functions
@@ -97,6 +100,7 @@ echo "✅ terraform.tfvars has been created locally in: $ENV_DIR"
 echo "🔒 This file is private to your environment and NOT uploaded to GitHub."
 echo ""
 
+echo "Current directory: $(pwd)"
 
 # Launch Terraform
 cd azmon-labs/terraform
