@@ -37,7 +37,7 @@ register_provider "Microsoft.Insights"
 register_provider "Microsoft.OperationalInsights"
 register_provider "Microsoft.SecurityInsights"
 register_provider "Microsoft.Monitor"
-register_provider "Microsoft.Dashboard"
+#register_provider "Microsoft.Dashboard"
 
 # Use the function to prompt for required inputs
 prompt_input "Enter the name for the Azure resource group" RESOURCE_GROUP
