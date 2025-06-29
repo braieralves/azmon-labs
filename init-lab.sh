@@ -81,7 +81,7 @@ if [ -z "$SUBSCRIPTION_ID" ]; then
 fi
 
 # Write user input to tfvars file
-ENV_DIR="terraform/environments/default"
+ENV_DIR="azmon-labs/terraform/environments/default"
 mkdir -p "$ENV_DIR"
 
 cat > "$ENV_DIR/terraform.tfvars" <<EOF
