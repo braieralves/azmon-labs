@@ -99,6 +99,6 @@ echo ""
 
 
 # Launch Terraform
-cd terraform
+cd azmon-labs/terraform
 terraform init
 terraform apply -var-file="environments/default/terraform.tfvars" -auto-approve
