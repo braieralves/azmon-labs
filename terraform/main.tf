@@ -27,6 +27,7 @@ module "log_analytics" {
   workspace_name      = var.workspace_name
 }
 
+/*
 module "network" {
   source              = "./modules/network"
   resource_group_name = module.resource_group.name
@@ -49,3 +50,4 @@ module "dcr" {
   workspace_id        = module.log_analytics.workspace_id
   target_resource_id  = module.vmss_windows.vmss_id
 }
+*/
