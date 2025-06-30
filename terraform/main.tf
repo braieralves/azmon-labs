@@ -40,6 +40,7 @@ module "network" {
 }
 
 
+
 module "vmss_windows" {
   source              = "./modules/vmss_windows"
   resource_group_name = module.resource_group.name

@@ -12,6 +12,7 @@ resource "azurerm_subnet" "subnet" {
   address_prefixes     = ["10.0.2.0/24"]
 }
 
+
 resource "azurerm_public_ip" "lb_public_ip" {
   name                = "lb-public-ip"
   location            = var.location
@@ -19,6 +20,7 @@ resource "azurerm_public_ip" "lb_public_ip" {
   allocation_method   = "Static"
   sku                 = "Standard"
 }
+
 
 resource "azurerm_lb" "lb" {
   name                = "lb-vmss"
