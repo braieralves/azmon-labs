@@ -35,7 +35,10 @@ module "network" {
   source              = "./modules/network"
   resource_group_name = module.resource_group.name
   location            = var.location
+  subnet_name         = var.subnet_name
+  my_ip               = local.my_ip
 }
+
 
 module "vmss_windows" {
   source              = "./modules/vmss_windows"
@@ -44,7 +47,11 @@ module "vmss_windows" {
   subnet_id           = module.network.subnet_id
   backend_pool_id     = module.network.backend_pool_id
   workspace_id        = module.log_analytics.workspace_id
+  vmss_name           = var.vmss_name
+  admin_username      = var.admin_username
+  admin_password      = var.admin_password
 }
+
 
 module "dcr" {
   source              = "./modules/dcr"
