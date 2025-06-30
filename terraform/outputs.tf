@@ -12,5 +12,5 @@ output "log_analytics_workspace_id" {
 
 output "log_analytics_workspace_name" {
   description = "The name of the Log Analytics Workspace"
-  value       = module.log_analytics.name
+  value       = module.log_analytics.workspace_name
 }
