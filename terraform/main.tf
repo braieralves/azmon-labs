@@ -23,7 +23,14 @@ module "log_analytics" {
   workspace_name      = var.workspace_name
 }
 
-/*
+data "http" "my_public_ip" {
+  url = "https://api.ipify.org?format=json"
+}
+
+locals {
+  my_ip = jsondecode(data.http.my_public_ip.response_body).ip
+}
+
 module "network" {
   source              = "./modules/network"
   resource_group_name = module.resource_group.name
@@ -46,4 +53,4 @@ module "dcr" {
   workspace_id        = module.log_analytics.workspace_id
   target_resource_id  = module.vmss_windows.vmss_id
 }
-*/
+
