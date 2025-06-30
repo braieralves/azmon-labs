@@ -7,7 +7,9 @@ variable "location" {
 }
 
 variable "subnet_name" {
-  type = string
+  type    = string
+  default = "vmss_subnet"
+  description = "Name of the subnet"
 }
 
 variable "my_ip" {

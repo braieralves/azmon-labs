@@ -42,6 +42,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
     type                       = "AzureMonitorWindowsAgent"
     auto_upgrade_minor_version = true
     automatic_upgrade_enabled  = true
+    type_handler_version       = "1.29"              # <-- This is required
     settings = <<SETTINGS
     {
       "workspaceId": "${var.workspace_id}"
