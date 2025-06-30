@@ -41,4 +41,29 @@ variable "admin_password" {
   default     = "P@ssw0rd123!"  # for labs; consider using environment variables or secret management
 }
 
+# Ubuntu VM Configuration
+variable "ubuntu_vm_name" {
+  description = "Name of the Ubuntu Virtual Machine"
+  type        = string
+  default     = "vm-ubuntu-lab"
+}
+
+variable "ubuntu_admin_username" {
+  description = "Admin username for the Ubuntu VM"
+  type        = string
+  default     = "azureuser"
+}
+
+variable "ssh_public_key" {
+  description = "SSH public key for Ubuntu VM authentication"
+  type        = string
+  # Example: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ... or file("~/.ssh/id_rsa.pub")
+}
+
+variable "ubuntu_vm_size" {
+  description = "Size of the Ubuntu VM"
+  type        = string
+  default     = "Standard_B2s"
+}
+
 
