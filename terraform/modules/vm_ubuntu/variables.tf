@@ -27,19 +27,8 @@ variable "admin_username" {
   default     = "azureuser"
 }
 
-variable "ssh_public_key" {
-  description = "SSH public key for authentication"
-  type        = string
-}
-
-variable "disable_password_authentication" {
-  description = "Whether to disable password authentication (recommended for security)"
-  type        = bool
-  default     = true
-}
-
 variable "admin_password" {
-  description = "Administrator password for the VM (required when SSH key is not used)"
+  description = "Administrator password for the VM"
   type        = string
   sensitive   = true
 }
