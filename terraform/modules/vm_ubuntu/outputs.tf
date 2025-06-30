@@ -34,7 +34,7 @@ output "network_interface_ids" {
 output "os_disk" {
   description = "The OS disk configuration of the Ubuntu Virtual Machine"
   value = {
-    id                   = azurerm_linux_virtual_machine.vm.os_disk[0].disk_id
+    name                 = azurerm_linux_virtual_machine.vm.os_disk[0].name
     size_gb             = azurerm_linux_virtual_machine.vm.os_disk[0].disk_size_gb
     caching             = azurerm_linux_virtual_machine.vm.os_disk[0].caching
     storage_account_type = azurerm_linux_virtual_machine.vm.os_disk[0].storage_account_type
