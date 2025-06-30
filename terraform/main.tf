@@ -155,8 +155,8 @@ module "vm_ubuntu" {
   location            = var.location
   vm_size             = var.ubuntu_vm_size
   admin_username      = var.ubuntu_admin_username
+  admin_password      = var.ubuntu_admin_password
   nic_id              = azurerm_network_interface.ubuntu_vm_nic.id
-  ssh_public_key      = var.ssh_public_key
 
   tags = {
     Environment = "Lab"

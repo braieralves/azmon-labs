@@ -38,6 +38,12 @@ variable "disable_password_authentication" {
   default     = true
 }
 
+variable "admin_password" {
+  description = "Administrator password for the VM (required when SSH key is not used)"
+  type        = string
+  sensitive   = true
+}
+
 # Network Configuration
 variable "nic_id" {
   description = "ID of the network interface to attach to the VM"

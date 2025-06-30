@@ -4,7 +4,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
   location                        = var.location
   size                            = var.vm_size
   admin_username                  = var.admin_username
-  disable_password_authentication = var.disable_password_authentication
+  admin_password                  = var.admin_password
+  disable_password_authentication = false  # Allow password authentication
   computer_name                   = var.computer_name != null ? var.computer_name : var.vm_name
   custom_data                     = var.custom_data
   network_interface_ids           = [var.nic_id]
@@ -25,11 +26,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
     offer     = "0001-com-ubuntu-server-jammy"
     sku       = var.ubuntu_sku
     version   = var.ubuntu_version
-  }
-
-  admin_ssh_key {
-    username   = var.admin_username
-    public_key = var.ssh_public_key
   }
 
   tags = var.tags

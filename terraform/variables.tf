@@ -66,4 +66,11 @@ variable "ubuntu_vm_size" {
   default     = "Standard_B2s"
 }
 
+variable "ubuntu_admin_password" {
+  description = "Admin password for the Ubuntu VM"
+  type        = string
+  default     = "P@ssw0rd123!"  # Default for labs; consider using environment variables for production
+  sensitive   = true
+}
+
 
