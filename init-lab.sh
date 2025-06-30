@@ -104,3 +104,16 @@ echo "Current directory: $(pwd)"
 cd azmon-labs/terraform
 terraform init
 terraform apply -var-file="environments/default/terraform.tfvars" -auto-approve
+
+# Save Terraform outputs to a JSON file
+terraform output -json > tf_outputs.json
+echo "Terraform outputs saved to tf_outputs.json"
+
+# Launch shell script to deploy monitoring
+echo "🚀 Launching deploy_monitoring.sh..."
+cd ~
+cd azmon-labs/scripts || {
+  echo "Error: Scripts folder not found."
+  exit 1
+}
+bash deploy_monitoring.sh
