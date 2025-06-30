@@ -2,8 +2,12 @@
 
 # -----------------------------------------------------------------------------
 
+set -e
+
 # Load variables from the Terraform output JSON
-TF_OUTPUTS="~/azmon-labs/terraform/tf_outputs.json"
+cd ~
+PWD=$(pwd)
+TF_OUTPUTS="$PWD/azmon-labs/terraform/tf_outputs.json"
 
 
 # Checks if the Terraform outputs file exists and loads the necessary variables.
