@@ -110,7 +110,7 @@ terraform output -json > tf_outputs.json
 echo "Terraform outputs saved to tf_outputs.json"
 
 # Launch shell script to deploy monitoring
-echo "🚀 Launching deploy_monitoring.sh..."
+echo "🚀 Launching deploy-monitoring.sh..."
 cd ~
 cd azmon-labs/scripts || {
   echo "Error: Scripts folder not found."
