@@ -95,4 +95,30 @@ variable "windows_vm_size" {
   default     = "Standard_B2s"
 }
 
+# Red Hat VM Configuration
+variable "redhat_vm_name" {
+  description = "Name of the Red Hat Virtual Machine"
+  type        = string
+  default     = "vm-redhat-lab"
+}
+
+variable "redhat_admin_username" {
+  description = "Admin username for the Red Hat VM"
+  type        = string
+  default     = "azureuser"
+}
+
+variable "redhat_admin_password" {
+  description = "Admin password for the Red Hat VM"
+  type        = string
+  default     = "P@ssw0rd123!"  # Default for labs; consider using environment variables for production
+  sensitive   = true
+}
+
+variable "redhat_vm_size" {
+  description = "Size of the Red Hat VM"
+  type        = string
+  default     = "Standard_B2s"
+}
+
 

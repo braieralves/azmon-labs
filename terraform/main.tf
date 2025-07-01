@@ -270,3 +270,106 @@ module "vm_windows" {
   }
 }
 
+# Network Interface for Red Hat VM
+resource "azurerm_public_ip" "redhat_vm_public_ip" {
+  name                = "${var.redhat_vm_name}-public-ip"
+  location            = var.location
+  resource_group_name = module.resource_group.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+
+  tags = {
+    Environment = "Lab"
+    Purpose     = "Red Hat VM"
+  }
+}
+
+resource "azurerm_network_interface" "redhat_vm_nic" {
+  name                = "${var.redhat_vm_name}-nic"
+  location            = var.location
+  resource_group_name = module.resource_group.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = module.network.subnet_id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.redhat_vm_public_ip.id
+  }
+
+  tags = {
+    Environment = "Lab"
+    Purpose     = "Red Hat VM"
+  }
+}
+
+# Network Security Group for Red Hat VM (SSH access)
+resource "azurerm_network_security_group" "redhat_vm_nsg" {
+  name                = "${var.redhat_vm_name}-nsg"
+  location            = var.location
+  resource_group_name = module.resource_group.name
+
+  security_rule {
+    name                       = "allow_ssh"
+    priority                   = 1000
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = local.my_ip
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "allow_http"
+    priority                   = 1100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "allow_https"
+    priority                   = 1200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags = {
+    Environment = "Lab"
+    Purpose     = "Red Hat VM"
+  }
+}
+
+resource "azurerm_network_interface_security_group_association" "redhat_vm_nsg_association" {
+  network_interface_id      = azurerm_network_interface.redhat_vm_nic.id
+  network_security_group_id = azurerm_network_security_group.redhat_vm_nsg.id
+}
+
+# Red Hat VM Module
+module "vm_redhat" {
+  source              = "./modules/vm_redhat"
+  vm_name             = var.redhat_vm_name
+  resource_group_name = module.resource_group.name
+  location            = var.location
+  vm_size             = var.redhat_vm_size
+  admin_username      = var.redhat_admin_username
+  admin_password      = var.redhat_admin_password
+  nic_id              = azurerm_network_interface.redhat_vm_nic.id
+
+  tags = {
+    Environment = "Lab"
+    Purpose     = "Red Hat VM"
+    Project     = "Azure Monitoring"
+  }
+}
+
