@@ -35,7 +35,7 @@ module "network" {
   source              = "./modules/network"
   resource_group_name = module.resource_group.name
   location            = var.location
-  subnet_name         = "vmss_subnet"  # <-- explicitly assign her
+  subnet_name         = "vmss_subnet"
   my_ip               = local.my_ip
 }
 
@@ -53,14 +53,16 @@ module "vmss_windows" {
   admin_password      = var.admin_password
 }
 
-
-module "dcr" {
+/*
+module "dcr_vmss" {
   source              = "./modules/dcr"
   resource_group_name = module.resource_group.name
   location            = var.location
   workspace_id        = module.log_analytics.workspace_id
   target_resource_id  = module.vmss_windows.vmss_id
 }
+
+*/
 
 # Network Interface for Ubuntu VM
 resource "azurerm_public_ip" "ubuntu_vm_public_ip" {

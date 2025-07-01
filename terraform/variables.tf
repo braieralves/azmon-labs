@@ -21,6 +21,7 @@ variable "subscription_id" {
 variable "subnet_name" {
   description = "Name of the subnet"
   type        = string
+  default     = "vmss_subnet"
 }
 
 variable "vmss_name" {
@@ -54,11 +55,6 @@ variable "ubuntu_admin_username" {
   default     = "azureuser"
 }
 
-variable "ssh_public_key" {
-  description = "SSH public key for Ubuntu VM authentication"
-  type        = string
-  # Example: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ... or file("~/.ssh/id_rsa.pub")
-}
 
 variable "ubuntu_vm_size" {
   description = "Size of the Ubuntu VM"
