@@ -402,12 +402,8 @@ resource "azurerm_sentinel_log_analytics_workspace_onboarding" "main" {
   workspace_id = module.log_analytics.workspace_id
 }
 
-# CEF Data Connector
-resource "azurerm_sentinel_data_connector_cef" "cef" {
-  name                       = "cef-connector"
-  log_analytics_workspace_id = module.log_analytics.workspace_id
-  depends_on                 = [azurerm_sentinel_log_analytics_workspace_onboarding.main]
-}
+# Note: CEF connector enablement is handled through the DCR creation
+# The CEF data connector is implicitly enabled when we create a CEF DCR
 
 # CEF Data Collection Rule
 resource "azurerm_monitor_data_collection_rule" "cef_dcr" {
@@ -443,7 +439,7 @@ resource "azurerm_monitor_data_collection_rule" "cef_dcr" {
     Project     = "Azure Monitoring"
   }
 
-  depends_on = [azurerm_sentinel_data_connector_cef.cef]
+  depends_on = [azurerm_sentinel_log_analytics_workspace_onboarding.main]
 }
 
 # Associate CEF DCR with Red Hat VM
