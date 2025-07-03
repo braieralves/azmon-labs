@@ -116,4 +116,5 @@ cd azmon-labs/scripts || {
   echo "Error: Scripts folder not found."
   exit 1
 }
+
 bash deploy-monitoring.sh

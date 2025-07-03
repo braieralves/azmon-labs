@@ -40,7 +40,7 @@ module "network" {
 }
 
 
-
+/*
 module "vmss_windows" {
   source              = "./modules/vmss_windows"
   resource_group_name = module.resource_group.name
@@ -53,7 +53,7 @@ module "vmss_windows" {
   admin_password      = var.admin_password
 }
 
-/*
+
 module "dcr_vmss" {
   source              = "./modules/dcr"
   resource_group_name = module.resource_group.name
@@ -344,6 +344,30 @@ resource "azurerm_network_security_group" "redhat_vm_nsg" {
     destination_address_prefix = "*"
   }
 
+  security_rule {
+    name                       = "allow_syslog"
+    priority                   = 1300
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Udp"
+    source_port_range          = "*"
+    destination_port_range     = "514"
+    source_address_prefixes    = ["10.0.2.0/24"]  # Internal subnet only
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "allow_cef_tcp"
+    priority                   = 1400
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "25226"
+    source_address_prefixes    = ["10.0.2.0/24"]  # Internal subnet only
+    destination_address_prefix = "*"
+  }
+
   tags = {
     Environment = "Lab"
     Purpose     = "Red Hat VM"
@@ -371,5 +395,61 @@ module "vm_redhat" {
     Purpose     = "Red Hat VM"
     Project     = "Azure Monitoring"
   }
+}
+
+# Microsoft Sentinel Configuration
+resource "azurerm_sentinel_log_analytics_workspace_onboarding" "main" {
+  workspace_id = module.log_analytics.workspace_id
+}
+
+# CEF Data Connector
+resource "azurerm_sentinel_data_connector_cef" "cef" {
+  name                       = "cef-connector"
+  log_analytics_workspace_id = module.log_analytics.workspace_id
+  depends_on                 = [azurerm_sentinel_log_analytics_workspace_onboarding.main]
+}
+
+# CEF Data Collection Rule
+resource "azurerm_monitor_data_collection_rule" "cef_dcr" {
+  name                = "dcr-cef-sentinel"
+  location            = var.location
+  resource_group_name = module.resource_group.name
+  kind                = "Linux"
+
+  data_sources {
+    syslog {
+      name           = "syslog-cef"
+      streams        = ["Microsoft-CommonSecurityLog"]
+      facility_names = ["*"]
+      log_levels     = ["*"]
+    }
+  }
+
+  destinations {
+    log_analytics {
+      name                  = "sentinel-destination"
+      workspace_resource_id = module.log_analytics.workspace_id
+    }
+  }
+
+  data_flow {
+    streams      = ["Microsoft-CommonSecurityLog"]
+    destinations = ["sentinel-destination"]
+  }
+
+  tags = {
+    Environment = "Lab"
+    Purpose     = "CEF Data Collection"
+    Project     = "Azure Monitoring"
+  }
+
+  depends_on = [azurerm_sentinel_data_connector_cef.cef]
+}
+
+# Associate CEF DCR with Red Hat VM
+resource "azurerm_monitor_data_collection_rule_association" "cef_dcr_redhat_association" {
+  name                    = "cef-dcr-redhat-association"
+  data_collection_rule_id = azurerm_monitor_data_collection_rule.cef_dcr.id
+  target_resource_id      = module.vm_redhat.vm_id
 }
 
