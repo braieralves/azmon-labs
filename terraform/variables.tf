@@ -43,7 +43,7 @@ variable "admin_password" {
   default     = "P@ssw0rd123!"  # for labs; consider using environment variables or secret management
 }
 
-
+*/
 
 # Ubuntu VM Configuration
 variable "ubuntu_vm_name" {
@@ -71,7 +71,7 @@ variable "ubuntu_admin_password" {
   default     = "P@ssw0rd123!"  # Default for labs; consider using environment variables for production
   sensitive   = true
 }
-*/
+
 
 /*
 # Windows VM Configuration
