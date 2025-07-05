@@ -34,3 +34,10 @@ output "redhat_vm_name" {
   value       = module.vm_redhat.vm_name
 }
 
+
+# VM IP Addresses
+output "redhat_vm_private_ip" {
+  description = "The private (internal) IP address of the Red Hat Virtual Machine"
+  value       = module.vm_redhat.private_ip_address
+}
+
