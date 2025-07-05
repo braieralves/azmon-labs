@@ -66,6 +66,7 @@ module "dcr_vmss" {
 
 */
 
+/*
 # Network Interface for Ubuntu VM
 resource "azurerm_public_ip" "ubuntu_vm_public_ip" {
   name                = "${var.ubuntu_vm_name}-public-ip"
@@ -168,6 +169,8 @@ module "vm_ubuntu" {
     Project     = "Azure Monitoring"
   }
 }
+
+*/
 
 /*
 
@@ -395,6 +398,7 @@ module "vm_redhat" {
   admin_username      = var.redhat_admin_username
   admin_password      = var.redhat_admin_password
   nic_id              = azurerm_network_interface.redhat_vm_nic.id
+  workspace_id        = module.log_analytics.workspace_id
 
   tags = {
     Environment = "Lab"

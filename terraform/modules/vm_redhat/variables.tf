@@ -102,3 +102,9 @@ variable "patch_mode" {
   type        = string
   default     = "ImageDefault"
 }
+
+# Monitoring Configuration
+variable "workspace_id" {
+  description = "Log Analytics Workspace ID for Azure Monitor Agent"
+  type        = string
+}
