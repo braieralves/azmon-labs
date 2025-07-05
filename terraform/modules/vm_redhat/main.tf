@@ -10,6 +10,11 @@ resource "azurerm_linux_virtual_machine" "vm" {
   custom_data                     = var.custom_data
   network_interface_ids           = [var.nic_id]
 
+  # System-assigned managed identity for Azure Monitor Agent
+  identity {
+    type = "SystemAssigned"
+  }
+
   # Patch management
   patch_mode                  = var.patch_mode
   provision_vm_agent         = true
@@ -46,4 +51,11 @@ resource "azurerm_virtual_machine_extension" "ama_linux" {
   })
 
   tags = var.tags
+}
+
+# Role assignment for Monitoring Metrics Publisher (minimal required for AMA)
+resource "azurerm_role_assignment" "monitoring_metrics_publisher" {
+  scope                = azurerm_linux_virtual_machine.vm.id
+  role_definition_name = "Monitoring Metrics Publisher"
+  principal_id         = azurerm_linux_virtual_machine.vm.identity[0].principal_id
 }

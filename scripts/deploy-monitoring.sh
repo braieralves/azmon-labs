@@ -31,9 +31,9 @@ echo "Using Log Analytics workspace: $WORKSPACE_NAME"
 echo "🔧 Installing AMA Forwarder on Red Hat VM: $REDHAT_VM_NAME"
 
 
-#az vm run-command invoke \
-#  --resource-group "$RESOURCE_GROUP" \
-#  --name "$REDHAT_VM_NAME" \
-#  --command-id RunShellScript \
-#  --scripts "$(cat "$HOME/azmon-labs/scripts/deploy_ama_forwarder.sh")"
+az vm run-command invoke \
+  --resource-group "$RESOURCE_GROUP" \
+  --name "$REDHAT_VM_NAME" \
+  --command-id RunShellScript \
+  --scripts "$(cat "$HOME/azmon-labs/scripts/deploy_ama_forwarder.sh")"
 

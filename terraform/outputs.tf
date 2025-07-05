@@ -15,14 +15,14 @@ output "log_analytics_workspace_name" {
   value       = module.log_analytics.workspace_name
 }
 
-/*
+
 # VM Names
 output "ubuntu_vm_name" {
   description = "The name of the Ubuntu Virtual Machine"
   value       = module.vm_ubuntu.vm_name
 }
 
-
+/*
 output "windows_vm_name" {
   description = "The name of the Windows Virtual Machine"
   value       = module.vm_windows.vm_name

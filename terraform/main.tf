@@ -66,7 +66,7 @@ module "dcr_vmss" {
 
 */
 
-/*
+
 # Network Interface for Ubuntu VM
 resource "azurerm_public_ip" "ubuntu_vm_public_ip" {
   name                = "${var.ubuntu_vm_name}-public-ip"
@@ -162,6 +162,7 @@ module "vm_ubuntu" {
   admin_username      = var.ubuntu_admin_username
   admin_password      = var.ubuntu_admin_password
   nic_id              = azurerm_network_interface.ubuntu_vm_nic.id
+  workspace_id        = module.log_analytics.workspace_id
 
   tags = {
     Environment = "Lab"
@@ -170,7 +171,7 @@ module "vm_ubuntu" {
   }
 }
 
-*/
+
 
 /*
 
@@ -457,5 +458,49 @@ resource "azurerm_monitor_data_collection_rule_association" "cef_dcr_redhat_asso
   name                    = "cef-dcr-redhat-association"
   data_collection_rule_id = azurerm_monitor_data_collection_rule.cef_dcr.id
   target_resource_id      = module.vm_redhat.vm_id
+}
+
+# Syslog Data Collection Rule for Ubuntu VM
+resource "azurerm_monitor_data_collection_rule" "syslog_dcr" {
+  name                = "dcr-syslog-ubuntu"
+  location            = var.location
+  resource_group_name = module.resource_group.name
+  kind                = "Linux"
+
+  data_sources {
+    syslog {
+      name           = "syslog-all"
+      streams        = ["Microsoft-Syslog"]
+      facility_names = ["*"]  # All facilities
+      log_levels     = ["*"]  # All severities
+    }
+  }
+
+  destinations {
+    log_analytics {
+      name                  = "log-analytics-destination"
+      workspace_resource_id = module.log_analytics.workspace_id
+    }
+  }
+
+  data_flow {
+    streams      = ["Microsoft-Syslog"]
+    destinations = ["log-analytics-destination"]
+  }
+
+  tags = {
+    Environment = "Lab"
+    Purpose     = "Ubuntu Syslog Collection"
+    Project     = "Azure Monitoring"
+  }
+
+  depends_on = [azurerm_sentinel_log_analytics_workspace_onboarding.main]
+}
+
+# Associate Syslog DCR with Ubuntu VM
+resource "azurerm_monitor_data_collection_rule_association" "syslog_dcr_ubuntu_association" {
+  name                    = "syslog-dcr-ubuntu-association"
+  data_collection_rule_id = azurerm_monitor_data_collection_rule.syslog_dcr.id
+  target_resource_id      = module.vm_ubuntu.vm_id
 }
 

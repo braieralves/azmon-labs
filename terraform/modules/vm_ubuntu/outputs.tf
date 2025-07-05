@@ -84,3 +84,14 @@ output "ssh_connection_command" {
   description = "SSH connection command for the Ubuntu Virtual Machine"
   value       = "ssh ${azurerm_linux_virtual_machine.vm.admin_username}@${azurerm_linux_virtual_machine.vm.public_ip_address}"
 }
+
+# Managed Identity Information
+output "managed_identity_principal_id" {
+  description = "The principal ID of the system-assigned managed identity"
+  value       = azurerm_linux_virtual_machine.vm.identity[0].principal_id
+}
+
+output "managed_identity_tenant_id" {
+  description = "The tenant ID of the system-assigned managed identity"
+  value       = azurerm_linux_virtual_machine.vm.identity[0].tenant_id
+}
