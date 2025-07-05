@@ -31,6 +31,8 @@ locals {
   my_ip = jsondecode(data.http.my_public_ip.response_body).ip
 }
 
+/*
+
 module "network" {
   source              = "./modules/network"
   resource_group_name = module.resource_group.name
@@ -40,7 +42,7 @@ module "network" {
 }
 
 
-/*
+
 module "vmss_windows" {
   source              = "./modules/vmss_windows"
   resource_group_name = module.resource_group.name
@@ -167,6 +169,8 @@ module "vm_ubuntu" {
   }
 }
 
+/*
+
 # Network Interface for Windows VM
 resource "azurerm_public_ip" "windows_vm_public_ip" {
   name                = "${var.windows_vm_name}-public-ip"
@@ -269,6 +273,8 @@ module "vm_windows" {
     Project     = "Azure Monitoring"
   }
 }
+
+*/
 
 # Network Interface for Red Hat VM
 resource "azurerm_public_ip" "redhat_vm_public_ip" {
