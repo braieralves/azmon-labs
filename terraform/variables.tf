@@ -18,6 +18,7 @@ variable "subscription_id" {
   type        = string
 }
 
+/*
 variable "subnet_name" {
   description = "Name of the subnet"
   type        = string
@@ -41,6 +42,8 @@ variable "admin_password" {
   type        = string
   default     = "P@ssw0rd123!"  # for labs; consider using environment variables or secret management
 }
+
+*/
 
 # Ubuntu VM Configuration
 variable "ubuntu_vm_name" {
@@ -68,7 +71,7 @@ variable "ubuntu_admin_password" {
   default     = "P@ssw0rd123!"  # Default for labs; consider using environment variables for production
   sensitive   = true
 }
-
+/*
 # Windows VM Configuration
 variable "windows_vm_name" {
   description = "Name of the Windows Virtual Machine"
@@ -94,7 +97,7 @@ variable "windows_vm_size" {
   type        = string
   default     = "Standard_B2s"
 }
-
+*/
 # Red Hat VM Configuration
 variable "redhat_vm_name" {
   description = "Name of the Red Hat Virtual Machine"

@@ -31,7 +31,7 @@ locals {
   my_ip = jsondecode(data.http.my_public_ip.response_body).ip
 }
 
-/*
+
 
 module "network" {
   source              = "./modules/network"
@@ -41,7 +41,7 @@ module "network" {
   my_ip               = local.my_ip
 }
 
-
+/*
 
 module "vmss_windows" {
   source              = "./modules/vmss_windows"

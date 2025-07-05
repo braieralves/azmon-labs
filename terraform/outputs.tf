@@ -21,11 +21,13 @@ output "ubuntu_vm_name" {
   value       = module.vm_ubuntu.vm_name
 }
 
+/*
 output "windows_vm_name" {
   description = "The name of the Windows Virtual Machine"
   value       = module.vm_windows.vm_name
 }
 
+*/
 output "redhat_vm_name" {
   description = "The name of the Red Hat Virtual Machine"
   value       = module.vm_redhat.vm_name
