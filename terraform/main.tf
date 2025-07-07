@@ -56,7 +56,7 @@ module "vmss_windows" {
 
 
 module "dcr_vmss" {
-  source              = "./modules/dcr"
+  source              = "./modules/dcr_vmss"
   resource_group_name = module.resource_group.name
   location            = var.location
   workspace_id        = module.log_analytics.workspace_id
