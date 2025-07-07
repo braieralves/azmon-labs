@@ -158,5 +158,7 @@ echo ""
 echo "⏰ Auto-shutdown will be configured automatically based on your system timezone."
 echo "💡 All VMs and VMSS will shutdown at 7:00 PM with 15-minute notification."
 
-cd ~/azmon-labs/scripts
-./deploy-monitoring.sh 
+#cd ~/azmon-labs/scripts
+#./deploy-monitoring.sh
+
+bash deploy-monitoring.sh
