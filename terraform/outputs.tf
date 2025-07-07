@@ -15,6 +15,11 @@ output "log_analytics_workspace_name" {
   value       = module.log_analytics.workspace_name
 }
 
+output "user_timezone" {
+  description = "The user's timezone for auto-shutdown configuration"
+  value       = var.user_timezone
+}
+
 
 # VM Names
 output "ubuntu_vm_name" {
@@ -22,16 +27,19 @@ output "ubuntu_vm_name" {
   value       = module.vm_ubuntu.vm_name
 }
 
-
 output "windows_vm_name" {
   description = "The name of the Windows Virtual Machine"
   value       = module.vm_windows.vm_name
 }
 
-
 output "redhat_vm_name" {
   description = "The name of the Red Hat Virtual Machine"
   value       = module.vm_redhat.vm_name
+}
+
+output "vmss_name" {
+  description = "The name of the Windows Virtual Machine Scale Set"
+  value       = module.vmss_windows.vmss_name
 }
 
 

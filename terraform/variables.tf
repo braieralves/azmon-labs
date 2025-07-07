@@ -18,6 +18,11 @@ variable "subscription_id" {
   type        = string
 }
 
+variable "user_timezone" {
+  description = "User's timezone for auto-shutdown configuration"
+  type        = string
+  default     = "UTC"
+}
 
 variable "subnet_name" {
   description = "Name of the subnet"
