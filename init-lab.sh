@@ -78,44 +78,35 @@ prompt_input "Enter the name for the Log Analytics Workspace" WORKSPACE_NAME
 echo ""
 echo "Auto-shutdown will be configured for all VMs and VMSS at 7:00 PM in your timezone."
 
-# Time zone options
-declare -A timezones=(
-  [1]="GMT Standard Time"               # Portugal, UK
-  [2]="W. Europe Standard Time"         # Spain, Germany
-  [3]="GTB Standard Time"               # Romania
-  [4]="Jordan Standard Time"            # Jordan
-  [5]="India Standard Time"             # India
-  [6]="Taipei Standard Time"            # Taiwan
-  [7]="China Standard Time"             # China
-  [8]="Korea Standard Time"             # South Korea
-  [9]="Tokyo Standard Time"             # Japan
-  [10]="AUS Eastern Standard Time"      # Australia - Sydney/Melbourne
-  [11]="Pacific Standard Time"          # US - Seattle
-  [12]="Central Standard Time"          # US - Texas
-  [13]="Eastern Standard Time"          # US - North Carolina, Canada - Toronto
-  [14]="Central America Standard Time"  # Costa Rica
-)
+# Default shutdown time
+local_time="19:00"
 
-# Display prompt
-echo "Select your time zone:"
-for i in "${!timezones[@]}"; do
-  echo " $i) ${timezones[$i]}"
-done
+# Prompt user for UTC offset
+read -p "Enter your time zone as UTC offset (e.g., UTC, UTC+1, UTC-5): " tz_input
 
-# Read user input
-read -p "Enter the number corresponding to your time zone: " tz_choice
-
-# Validate input, fallback to UTC
-if [[ ! ${timezones[$tz_choice]+_} ]]; then
-  echo "Invalid selection. Falling back to UTC."
-  timezone="UTC"
+# Parse offset
+if [[ "$tz_input" == "UTC" ]]; then
+  offset="+0"
+elif [[ "$tz_input" =~ ^UTC([+-][0-9]{1,2})$ ]]; then
+  offset="${BASH_REMATCH[1]}"
 else
-  timezone="${timezones[$tz_choice]}"
-  echo "You selected: $timezone"
+  echo "Invalid UTC offset format."
+  exit 1
+fi
+# Get today's date in YYYY-MM-DD
+today=$(date +%F)
+
+# Combine date and time
+datetime="$today $local_time"
+
+# Convert to UTC using the offset
+USER_TIMEZONE=$(date -u -d "$datetime $offset" +%H%M 2>/dev/null)
+
+if [[ -z "$USER_TIMEZONE" ]]; then
+  echo "Failed to convert time. Using fallback 1900 UTC."
+  USER_TIMEZONE="1900"
 fi
 
-# Set the user timezone
-USER_TIMEZONE="$timezone"
 
 # Fetch Azure subscription ID
 SUBSCRIPTION_ID=$(az account show --query id -o tsv)
@@ -160,6 +151,4 @@ echo "💡 All VMs and VMSS will shutdown at 7:00 PM with 15-minute notification
 
 cd ~/azmon-labs/scripts
 chmod +x deploy-monitoring.sh
-echo "hey"
 bash deploy-monitoring.sh
-echo "hey2"

@@ -90,7 +90,7 @@ The AKS and managed solutions deployment script accepts the following parameters
 The post-deployment script accepts the following parameters:
 
 ```bash
-./deploy-end-tasks.sh <RESOURCE_GROUP> <REDHAT_VM_NAME> <UBUNTU_VM_NAME> <WINDOWS_VM_NAME> <VMSS_NAME> <REDHAT_PRIVATE_IP> <USER_TIMEZONE>
+./deploy-end-tasks.sh <RESOURCE_GROUP> <REDHAT_VM_NAME> <UBUNTU_VM_NAME> <WINDOWS_VM_NAME> <VMSS_NAME> <REDHAT_PRIVATE_IP> <UTC_TIME>
 ```
 
 **Parameters:**
@@ -100,12 +100,14 @@ The post-deployment script accepts the following parameters:
 - `WINDOWS_VM_NAME`: Name of the Windows virtual machine
 - `VMSS_NAME`: Name of the Windows virtual machine scale set
 - `REDHAT_PRIVATE_IP`: Private IP address of the Red Hat VM
-- `USER_TIMEZONE`: User's timezone for auto-shutdown configuration
+- `UTC_TIME`: UTC time for auto-shutdown in HHMM format (calculated from user's local 7:00 PM)
 
 **Example:**
 ```bash
-./deploy-end-tasks.sh "rg-azmon-lab" "vm-redhat-001" "vm-ubuntu-001" "vm-windows-001" "vmss-windows-001" "10.0.1.100" "America/New_York"
+./deploy-end-tasks.sh "rg-azmon-lab" "vm-redhat-001" "vm-ubuntu-001" "vm-windows-001" "vmss-windows-001" "10.0.1.100" "0000"
 ```
+
+The UTC_TIME parameter represents 7:00 PM in the user's local timezone converted to UTC time.
 
 This approach eliminates the dependency on JSON file parsing and makes the scripts more portable and testable.
 
@@ -115,17 +117,19 @@ This approach eliminates the dependency on JSON file parsing and makes the scrip
 
 The lab automatically configures auto-shutdown for all VMs and VMSS to help manage costs:
 
-- **Shutdown Time**: 7:00 PM (1900 hours)
-- **Notification**: 15 minutes before shutdown (6:45 PM)
-- **Timezone**: User-specified during initialization (prompted in init-lab.sh)
+- **Shutdown Time**: 7:00 PM in your local timezone (converted to UTC automatically)
+- **Notification**: 15 minutes before shutdown
+- **Time Calculation**: User provides UTC offset during initialization, script calculates corresponding UTC time
 - **Resources**: All VMs and VMSS are configured
 
-During initialization, you'll be prompted to enter your timezone for auto-shutdown configuration. You can use:
-- **Standard abbreviations**: UTC, EST, PST, CST, MST, GMT, CET, EET, IST, JST, AEST
-- **Full timezone names**: America/New_York, America/Los_Angeles, Europe/London, Asia/Kolkata
-- **Any valid timezone**: Azure will validate the timezone during configuration
+During initialization, you'll be prompted to enter your UTC offset (e.g., UTC, UTC+1, UTC-5). The script will automatically calculate what 7:00 PM in your local time corresponds to in UTC and configure auto-shutdown accordingly.
 
-The timezone is stored in Terraform variables and passed through to the auto-shutdown configuration, ensuring all resources shutdown at 7:00 PM in your specified timezone.
+**Example:**
+- If you're in EST (UTC-5) and want 7:00 PM shutdown
+- Script calculates: 7:00 PM EST = 12:00 AM UTC (next day)
+- Auto-shutdown configured for 0000 UTC
+
+This approach works around Azure CLI limitations with timezone parameters and ensures accurate scheduling regardless of your location.
 
 ### Monitoring and Logging
 
