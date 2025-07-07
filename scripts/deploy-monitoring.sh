@@ -22,6 +22,8 @@ WORKSPACE_ID=$(jq -r '.log_analytics_workspace_id.value' "$TF_OUTPUTS")
 WORKSPACE_NAME=$(jq -r '.log_analytics_workspace_name.value' "$TF_OUTPUTS")
 REDHAT_VM_NAME=$(jq -r '.redhat_vm_name.value' "$TF_OUTPUTS")
 UBUNTU_VM_NAME=$(jq -r '.ubuntu_vm_name.value' "$TF_OUTPUTS")
+REDHAT_PRIVATE_IP=$(jq -r '.redhat_vm_private_ip.value' "$TF_OUTPUTS")
+
 
 echo "Using resource group: $RESOURCE_GROUP"
 echo "Using Log Analytics workspace: $WORKSPACE_NAME"
@@ -46,4 +48,6 @@ az vm run-command invoke \
   --resource-group "$RESOURCE_GROUP" \
   --name "$UBUNTU_VM_NAME" \
   --command-id RunShellScript \
-  --scripts "$(cat "$HOME/azmon-labs/scripts/deploy_cef_simulator.sh")"
+  --scripts "$(cat "$HOME/azmon-labs/scripts/deploy_cef_simulator.sh")" \
+  --parameters "redhatip_input=$REDHAT_PRIVATE_IP"
+

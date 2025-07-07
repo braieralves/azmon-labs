@@ -1,12 +1,14 @@
 #!/bin/bash
 
+
+REDHAT_PRIVATE_IP=$1
+echo "Received RedHatIP: $REDHAT_PRIVATE_IP"
+
+
 # Configuration
 CEF_SCRIPT="/opt/cef_sender.sh"
 CRON_MARKER="# CEF message sender"
-TF_OUTPUTS="$HOME/azmon-labs/terraform/tf_outputs.json"
-REDHAT_PRIVATE_IP=$(jq -r '.redhat_vm_private_ip.value' "$TF_OUTPUTS")
 
-echo "Red Hat VM private IP: $REDHAT_PRIVATE_IP"
 
 # Use this IP when configuring Ubuntu to send logs to Red Hat
 # For example: logger -n
