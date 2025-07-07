@@ -160,3 +160,4 @@ echo "💡 All VMs and VMSS will shutdown at 7:00 PM with 15-minute notification
 
 cd ~/azmon-labs/scripts
 chmod +x deploy-monitoring.sh
+./deploy-monitoring.sh
