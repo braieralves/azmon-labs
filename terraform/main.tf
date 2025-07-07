@@ -41,7 +41,6 @@ module "network" {
   my_ip               = local.my_ip
 }
 
-/*
 
 module "vmss_windows" {
   source              = "./modules/vmss_windows"
@@ -64,7 +63,7 @@ module "dcr_vmss" {
   target_resource_id  = module.vmss_windows.vmss_id
 }
 
-*/
+
 
 
 # Network Interface for Ubuntu VM
@@ -173,8 +172,6 @@ module "vm_ubuntu" {
 
 
 
-/*
-
 # Network Interface for Windows VM
 resource "azurerm_public_ip" "windows_vm_public_ip" {
   name                = "${var.windows_vm_name}-public-ip"
@@ -278,7 +275,6 @@ module "vm_windows" {
   }
 }
 
-*/
 
 # Network Interface for Red Hat VM
 resource "azurerm_public_ip" "redhat_vm_public_ip" {
