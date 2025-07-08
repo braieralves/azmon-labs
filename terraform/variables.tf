@@ -27,19 +27,19 @@ variable "user_timezone" {
 variable "aks_name" {
   description = "AKS Cluster name"
   type        = string
-  default     = "aks_azmon"
+  default     = "aks-azmon"
 }
 
 variable "grafana_name" {
   description = "Managed Grafana name"
   type        = string
-  default     = "managed_gf"
+  default     = "managed-gf"
 }
 
 variable "prom_name" {
   description = "Managed Prometheus name"
   type        = string
-  default     = "managed_pm"
+  default     = "managed-pm"
 }
 
 

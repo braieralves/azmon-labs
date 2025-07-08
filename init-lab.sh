@@ -53,9 +53,18 @@ register_provider() {
 prompt_input() {
   local prompt_msg=$1
   local var_name=$2
-  while [ -z "${!var_name}" ]; do
-    read -rp "$prompt_msg: " $var_name
-  done
+  local current_value="${!var_name}"
+  
+  if [ -n "$current_value" ]; then
+    read -rp "$prompt_msg [$current_value]: " input
+    if [ -n "$input" ]; then
+      eval $var_name="$input"
+    fi
+  else
+    while [ -z "${!var_name}" ]; do
+      read -rp "$prompt_msg: " $var_name
+    done
+  fi
 }
 
 # -------------------------------
@@ -63,6 +72,14 @@ prompt_input() {
 # -------------------------------
 
 echo "== Azure Monitor Labs Initialization =="
+
+# Set default values
+RESOURCE_GROUP="rg-azmon-lab"
+LOCATION="East US"
+WORKSPACE_NAME="azmon-workspace"
+AKS_CLUSTER="aks-azmon"
+MANAGED_GRAFANA="managed-gf"
+PROM_NAME="managed-pm"
 
 # Register necessary Azure providers
 for ns in Microsoft.Insights Microsoft.OperationalInsights Microsoft.Monitor Microsoft.SecurityInsights Microsoft.Dashboard; do
