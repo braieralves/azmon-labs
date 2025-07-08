@@ -123,6 +123,7 @@ ENV_DIR="azmon-labs/terraform/environments/default"
 mkdir -p "$ENV_DIR"
 
 cat > "$ENV_DIR/terraform.tfvars" <<EOF
+# Core Configuration
 resource_group_name = "$RESOURCE_GROUP"
 location            = "$LOCATION"
 workspace_name      = "$WORKSPACE_NAME"
@@ -131,6 +132,32 @@ user_timezone       = "$USER_TIMEZONE"
 aks_name            = "$AKS_CLUSTER"
 grafana_name        = "$MANAGED_GRAFANA"
 prom_name           = "$PROM_NAME"
+
+# Network Configuration
+subnet_name = "vmss_subnet"
+
+# VMSS Configuration
+vmss_name      = "vmss-windows-lab"
+admin_username = "adminuser"
+admin_password = "P@ssw0rd123!"
+
+# Ubuntu VM Configuration
+ubuntu_vm_name         = "vm-ubuntu-lab"
+ubuntu_admin_username  = "azureuser"
+ubuntu_vm_size         = "Standard_B2s"
+ubuntu_admin_password  = "P@ssw0rd123!"
+
+# Windows VM Configuration
+windows_vm_name         = "vm-windows-lab"
+windows_admin_username  = "adminuser"
+windows_admin_password  = "P@ssw0rd123!"
+windows_vm_size         = "Standard_B2s"
+
+# Red Hat VM Configuration
+redhat_vm_name         = "vm-redhat-lab"
+redhat_admin_username  = "azureuser"
+redhat_admin_password  = "P@ssw0rd123!"
+redhat_vm_size         = "Standard_B2s"
 EOF
 
 # Display the created tfvars file

@@ -4,14 +4,14 @@
 # deploy-aks-managedsolutions.sh
 # AKS and managed solutions deployment script for Azure monitoring lab
 # 
-# Usage: ./deploy-aks-managedsolutions.sh <RESOURCE_GROUP> <WORKSPACE_ID> <WORKSPACE_NAME>
+# Usage: ./deploy-aks-managedsolutions.sh <RESOURCE_GROUP> <WORKSPACE_ID> <WORKSPACE_NAME> <AKS_CLUSTER> <MANAGED_GRAFANA> <PROM_NAME>
 # -----------------------------------------------------------------------------
 
 set -e
 
 # Check if required parameters are provided
-if [ $# -ne 3 ]; then
-    echo "Usage: $0 <RESOURCE_GROUP> <WORKSPACE_ID> <WORKSPACE_NAME>"
+if [ $# -ne 6 ]; then
+    echo "Usage: $0 <RESOURCE_GROUP> <WORKSPACE_ID> <WORKSPACE_NAME> <AKS_CLUSTER> <MANAGED_GRAFANA> <PROM_NAME>"
     echo ""
     echo "Parameters:"
     echo "  RESOURCE_GROUP - Name of the Azure resource group"
@@ -24,6 +24,9 @@ fi
 RESOURCE_GROUP="$1"
 WORKSPACE_ID="$2"
 WORKSPACE_NAME="$3"
+AKS_CLUSTER_NAME="$4"
+MANAGED_GRAFANA_NAME="$5"
+PROM_NAME="$6"
 
 # Display received parameters
 echo "📋 Received parameters:"
@@ -35,80 +38,26 @@ echo ""
 # Start AKS and managed solutions deployment
 echo "🚀 Starting AKS and managed solutions deployment..."
 
-# Example AKS deployment (customize as needed)
-echo "🔧 Creating AKS cluster..."
-AKS_CLUSTER_NAME="aks-azmon-lab"
-AKS_NODE_COUNT=2
-AKS_NODE_SIZE="Standard_B2s"
 
-# Create AKS cluster with monitoring enabled
-az aks create \
-  --resource-group "$RESOURCE_GROUP" \
-  --name "$AKS_CLUSTER_NAME" \
-  --node-count $AKS_NODE_COUNT \
-  --node-vm-size "$AKS_NODE_SIZE" \
-  --enable-addons monitoring \
-  --workspace-resource-id "$WORKSPACE_ID" \
-  --generate-ssh-keys \
-  --enable-managed-identity \
-  --no-wait
-
-echo "✅ AKS cluster creation initiated (running in background)"
-
-# Enable Container Insights solution
-echo "🔧 Enabling Container Insights solution..."
-az monitor log-analytics solution create \
-  --resource-group "$RESOURCE_GROUP" \
-  --solution-type "ContainerInsights" \
-  --workspace "$WORKSPACE_NAME"
-
-echo "✅ Container Insights solution enabled"
-
-# Enable other monitoring solutions
-echo "🔧 Enabling additional monitoring solutions..."
-
-# Security Center solution
-az monitor log-analytics solution create \
-  --resource-group "$RESOURCE_GROUP" \
-  --solution-type "Security" \
-  --workspace "$WORKSPACE_NAME" || echo "Security solution may already exist"
-
-# Updates solution
-az monitor log-analytics solution create \
-  --resource-group "$RESOURCE_GROUP" \
-  --solution-type "Updates" \
-  --workspace "$WORKSPACE_NAME" || echo "Updates solution may already exist"
-
-echo "✅ Additional monitoring solutions configured"
-
-# Wait for AKS cluster to be ready
-echo "⏳ Waiting for AKS cluster to be ready..."
-az aks wait \
-  --resource-group "$RESOURCE_GROUP" \
-  --name "$AKS_CLUSTER_NAME" \
-  --created \
-  --timeout 600
-
-echo "✅ AKS cluster is ready"
-
-# Get AKS credentials
-echo "🔑 Getting AKS credentials..."
-az aks get-credentials \
-  --resource-group "$RESOURCE_GROUP" \
-  --name "$AKS_CLUSTER_NAME" \
-  --overwrite-existing
-
-echo "✅ AKS credentials configured"
-
-echo "🎉 AKS and managed solutions deployment completed successfully!"
-echo ""
-echo "📋 Resources Created:"
-echo "  - AKS Cluster: $AKS_CLUSTER_NAME"
-echo "  - Container Insights solution enabled"
-echo "  - Additional monitoring solutions configured"
-echo "  - Log Analytics workspace integration: $WORKSPACE_NAME"
-echo ""
-echo "🔧 Next Steps:"
-echo "  - Deploy applications to AKS cluster"
-echo "  - Configure additional monitoring as needed"
-echo "  - Access monitoring data in Log Analytics workspace"
+# Create a Managed Prometheus (Azure monitor Workspace) in the New Resource Group
+az monitor account create -g $1 -n $6 --location eastus2
+#
+# Create a Managed Grafana in the New Resource Group
+az grafana create --resource-group $1 --workspace-name $5--sku-tier Standard --public-network-access Enabled --location eastus2
+#
+# Create an AKS Cluster in the New Resource Group with Monitoring addon Enabled
+#
+# The first command retrieves the ID of a specified Log Analytics workspace and stores it in the workspaceId variable.
+workspaceId=$(az monitor log-analytics workspace show --resource-group $1 --workspace-name $3 --query id -o tsv)
+#
+# The second command creates an AKS cluster with monitoring enabled, linking it to the Log Analytics workspace using the retrieved ID. This setup integrates Azure Monitor for containers with the AKS cluster.
+az aks create -g $1 -n $4 --node-count 2 --enable-addons monitoring --generate-ssh-keys --workspace-resource-id $workspaceId
+#
+# The third command retrieves the ID of a specified Managed Prometheus and stores it in the workspaceId variable.
+prometheusId=$(az monitor account show --resource-group $1 -n $6 --query id -o tsv)
+#
+# The fourth command retrieves the ID of a specified Managed Grafana and stores it in the workspaceId variable.
+grafanaId=$(az grafana show --resource-group $1 -n $5 --query id -o tsv)
+#
+# The fifth update the AKS cluster to be monitored by Managed Prometheus and Managed Grafana
+az aks update --enable-azure-monitor-metrics -n $4 -g $1 --azure-monitor-workspace-resource-id $prometheusId --grafana-resource-id $grafanaId

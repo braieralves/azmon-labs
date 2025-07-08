@@ -19,7 +19,7 @@ echo "📋 Planning Terraform deployment..."
 terraform plan -var-file="environments/default/terraform.tfvars" -out=tfplan
 
 echo "🔧 Applying Terraform configuration..."
-terraform apply tfplan
+#terraform apply tfplan
 
 echo "💾 Saving Terraform outputs..."
 terraform output -json > tf_outputs.json
@@ -64,6 +64,7 @@ chmod +x deploy-aks-managedsolutions.sh
 echo "🔄 Running post-deployment configuration..."
 cd ~/azmon-labs/scripts
 chmod +x deploy-end-tasks.sh
+echo "heelo world"
 ./deploy-end-tasks.sh "$RESOURCE_GROUP" "$REDHAT_VM_NAME" "$UBUNTU_VM_NAME" "$WINDOWS_VM_NAME" "$VMSS_NAME" "$REDHAT_PRIVATE_IP" "$USER_TIMEZONE"
 
 echo "🎉 Azure Monitoring Lab deployment completed successfully!"

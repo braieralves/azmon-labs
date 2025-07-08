@@ -1,18 +1,5 @@
 #!/bin/bash
 
-# -----------------------------------------------------------------------------
-# deploy-end-tasks.sh
-# Post-deployment configura# Configure auto-shutdown for all VMs
-configure_vm_autoshutdown "$UBUNTU_VM_NAME" "$RESOURCE_GROUP" "$SHUTDOWN_TIME" "$NOTIFICATION_TIME"
-configure_vm_autoshutdown "$WINDOWS_VM_NAME" "$RESOURCE_GROUP" "$SHUTDOWN_TIME" "$NOTIFICATION_TIME"
-configure_vm_autoshutdown "$REDHAT_VM_NAME" "$RESOURCE_GROUP" "$SHUTDOWN_TIME" "$NOTIFICATION_TIME"
-
-# Configure auto-shutdown for VMSS
-configure_vmss_autoshutdown "$VMSS_NAME" "$RESOURCE_GROUP" "$SHUTDOWN_TIME" "$NOTIFICATION_TIME"ript for Azure monitoring lab
-# 
-# Usage: ./deploy-end-tasks.sh <RESOURCE_GROUP> <REDHAT_VM_NAME> <UBUNTU_VM_NAME> <WINDOWS_VM_NAME> <VMSS_NAME> <REDHAT_PRIVATE_IP>
-# -----------------------------------------------------------------------------
-
 set -e
 
 # Check if required parameters are provided
@@ -29,6 +16,8 @@ if [ $# -ne 7 ]; then
     echo "  UTC_TIME          - UTC time for auto-shutdown (HHMM format, calculated from user's local 7:00 PM)"
     exit 1
 fi
+
+echo "Hello World"
 
 # Assign input parameters to variables
 RESOURCE_GROUP="$1"
