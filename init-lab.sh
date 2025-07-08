@@ -137,7 +137,7 @@ prom_name           = "$PROM_NAME"
 subnet_name = "vmss_subnet"
 
 # VMSS Configuration
-vmss_name      = "vmss-windows-lab"
+vmss_name      = "vmss-win"
 admin_username = "adminuser"
 admin_password = "P@ssw0rd123!"
 

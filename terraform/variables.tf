@@ -27,7 +27,7 @@ variable "user_timezone" {
 variable "aks_name" {
   description = "AKS Cluster name"
   type        = string
-  default     = "aks_cluster"
+  default     = "aks_azmon"
 }
 
 variable "grafana_name" {
@@ -52,7 +52,7 @@ variable "subnet_name" {
 variable "vmss_name" {
   description = "Name of the Virtual Machine Scale Set"
   type        = string
-  default     = "vmss-tjf"  # or remove `default` if you want to require it in tfvars
+  default     = "vmss-win"  # Short name to avoid any naming issues
 }
 
 variable "admin_username" {

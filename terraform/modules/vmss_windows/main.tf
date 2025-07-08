@@ -7,6 +7,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
   instances           = 2
   admin_username      = "adminuser"
   admin_password      = "P@ssw0rd123!"
+  computer_name_prefix = "vmsswin"  # Max 9 characters
 
   source_image_reference {
     publisher = "MicrosoftWindowsServer"
