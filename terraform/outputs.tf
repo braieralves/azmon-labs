@@ -20,6 +20,21 @@ output "user_timezone" {
   value       = var.user_timezone
 }
 
+output  "aks_name" {
+  description = "AKS Cluster name"
+  value       = var.aks_cluster
+}
+
+output  "grafana_name" {
+  description = "Managed Grafana name"
+  value       = var.managed_gf
+}
+
+output  "prom_name" {
+  description = "Managed Prometheus name"
+  value       = var.managed_pm
+}
+
 
 # VM Names
 output "ubuntu_vm_name" {

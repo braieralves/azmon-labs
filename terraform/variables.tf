@@ -24,6 +24,25 @@ variable "user_timezone" {
   default     = "UTC"
 }
 
+variable "aks_name" {
+  description = "AKS Cluster name"
+  type        = string
+  default     = "aks_cluster"
+}
+
+variable "grafana_name" {
+  description = "Managed Grafana name"
+  type        = string
+  default     = "managed_gf"
+}
+
+variable "prom_name" {
+  description = "Managed Prometheus name"
+  type        = string
+  default     = "managed_pm"
+}
+
+
 variable "subnet_name" {
   description = "Name of the subnet"
   type        = string

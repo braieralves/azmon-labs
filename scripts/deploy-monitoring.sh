@@ -58,13 +58,13 @@ echo "$AKS_CLUSTER" "$MANAGED_GRAFANA" "$PROM_NAME"
 echo "🔄 Running aks, azmon workspace configuration..."
 cd ~/azmon-labs/scripts
 chmod +x deploy-aks-managedsolutions.sh
-#./deploy-aks-managedsolutions.sh "$RESOURCE_GROUP" "$WORKSPACE_ID" "$WORKSPACE_NAME" "$AKS_CLUSTER" "$MANAGED_GRAFANA" "$PROM_NAME"
+./deploy-aks-managedsolutions.sh "$RESOURCE_GROUP" "$WORKSPACE_ID" "$WORKSPACE_NAME" "$AKS_CLUSTER" "$MANAGED_GRAFANA" "$PROM_NAME"
 
 # Run post-deployment tasks
 echo "🔄 Running post-deployment configuration..."
 cd ~/azmon-labs/scripts
 chmod +x deploy-end-tasks.sh
-#./deploy-end-tasks.sh "$RESOURCE_GROUP" "$REDHAT_VM_NAME" "$UBUNTU_VM_NAME" "$WINDOWS_VM_NAME" "$VMSS_NAME" "$REDHAT_PRIVATE_IP" "$USER_TIMEZONE"
+./deploy-end-tasks.sh "$RESOURCE_GROUP" "$REDHAT_VM_NAME" "$UBUNTU_VM_NAME" "$WINDOWS_VM_NAME" "$VMSS_NAME" "$REDHAT_PRIVATE_IP" "$USER_TIMEZONE"
 
 echo "🎉 Azure Monitoring Lab deployment completed successfully!"
 echo ""
