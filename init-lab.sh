@@ -73,6 +73,9 @@ done
 prompt_input "Enter the name for the Azure Resource Group" RESOURCE_GROUP
 prompt_input "Enter the Azure location (e.g., westeurope)" LOCATION
 prompt_input "Enter the name for the Log Analytics Workspace" WORKSPACE_NAME
+prompt_input "Enter the name for the AKS cluster" AKS_CLUSTER
+prompt_input "Enter the name for the Managed Grafana" MANAGED_GRAFANA
+prompt_input "Enter the name for the Azure Monitor Workspace(Managed Prometheus)" PROM_NAME
 
 # Prompt for timezone for auto-shutdown configuration
 echo ""
@@ -125,6 +128,9 @@ location            = "$LOCATION"
 workspace_name      = "$WORKSPACE_NAME"
 subscription_id     = "$SUBSCRIPTION_ID"
 user_timezone       = "$USER_TIMEZONE"
+aks_name            = "$AKS_CLUSTER"
+grafana_name        = "$MANAGED_GRAFANA"
+prom_name           = "$PROM_NAME"
 EOF
 
 # Display the created tfvars file
