@@ -22,17 +22,17 @@ output "user_timezone" {
 
 output  "aks_name" {
   description = "AKS Cluster name"
-  value       = var.aks_cluster
+  value       = var.aks_name
 }
 
 output  "grafana_name" {
   description = "Managed Grafana name"
-  value       = var.managed_gf
+  value       = var.grafana_name
 }
 
 output  "prom_name" {
   description = "Managed Prometheus name"
-  value       = var.managed_pm
+  value       = var.prom_name
 }
 
 
