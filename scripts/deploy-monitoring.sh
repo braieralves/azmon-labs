@@ -19,7 +19,7 @@ echo "📋 Planning Terraform deployment..."
 terraform plan -var-file="environments/default/terraform.tfvars" -out=tfplan
 
 echo "🔧 Applying Terraform configuration..."
-#terraform apply tfplan
+terraform apply tfplan
 
 echo "💾 Saving Terraform outputs..."
 terraform output -json > tf_outputs.json
