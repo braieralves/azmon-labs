@@ -49,11 +49,14 @@ variable "subnet_name" {
   default     = "vmss_subnet"
 }
 
+/*
 variable "vmss_name" {
   description = "Name of the Virtual Machine Scale Set"
   type        = string
   default     = "vmss-win"  # Short name to avoid any naming issues
 }
+
+*/
 
 variable "admin_username" {
   description = "Admin username for the VMSS"

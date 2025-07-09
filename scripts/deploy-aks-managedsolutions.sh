@@ -14,36 +14,41 @@ if [ $# -ne 6 ]; then
     echo "Usage: $0 <RESOURCE_GROUP> <WORKSPACE_ID> <WORKSPACE_NAME> <AKS_CLUSTER> <MANAGED_GRAFANA> <PROM_NAME>"
     echo ""
     echo "Parameters:"
-    echo "  RESOURCE_GROUP - Name of the Azure resource group"
-    echo "  WORKSPACE_ID   - Full resource ID of the Log Analytics workspace"
-    echo "  WORKSPACE_NAME - Name of the Log Analytics workspace"
+    echo "  RESOURCE_GROUP  - Name of the Azure resource group"
+    echo "  WORKSPACE_ID    - Full resource ID of the Log Analytics workspace"
+    echo "  WORKSPACE_NAME  - Name of the Log Analytics workspace"
+    echo "  AKS_CLUSTER     - Name of the the AKS cluster"
+    echo "  MANAGED_GRAFANA - Name of the the Managed Grafana"
+    echo "  PROM_NAME       - Name of the Azure Monitor Workspace(Managed Prometheus)"
     exit 1
 fi
+#
+#echo "Choose a name for your AKS cluster:"
+#read AKS_CLUSTER
+#
+#echo "Choose a name for your Managed Prometheus:"
+#read PROM_NAME
+#
+#echo "Choose a name for your Managed Grafana:"
+#read MANAGED_GRAFANA
+#
 
 # Assign input parameters to variables
 RESOURCE_GROUP="$1"
 WORKSPACE_ID="$2"
 WORKSPACE_NAME="$3"
-AKS_CLUSTER_NAME="$4"
-MANAGED_GRAFANA_NAME="$5"
+AKS_CLUSTER="$4"
+MANAGED_GRAFANA="$5"
 PROM_NAME="$6"
 
-# Display received parameters
-echo "📋 Received parameters:"
-echo "  Resource Group: $RESOURCE_GROUP"
-echo "  Workspace ID: $WORKSPACE_ID"
-echo "  Workspace Name: $WORKSPACE_NAME"
-echo ""
-
-# Start AKS and managed solutions deployment
-echo "🚀 Starting AKS and managed solutions deployment..."
-
-
+# Avoid extension installing confirmation
+az config set extension.use_dynamic_install=yes_without_prompt
+#
 # Create a Managed Prometheus (Azure monitor Workspace) in the New Resource Group
-az monitor account create -g $1 -n $6 --location eastus2
+az monitor account create -g $1 -n $6 
 #
 # Create a Managed Grafana in the New Resource Group
-az grafana create --resource-group $1 --workspace-name $5--sku-tier Standard --public-network-access Enabled --location eastus2
+az grafana create --resource-group $1 --name $5
 #
 # Create an AKS Cluster in the New Resource Group with Monitoring addon Enabled
 #
@@ -61,3 +66,14 @@ grafanaId=$(az grafana show --resource-group $1 -n $5 --query id -o tsv)
 #
 # The fifth update the AKS cluster to be monitored by Managed Prometheus and Managed Grafana
 az aks update --enable-azure-monitor-metrics -n $4 -g $1 --azure-monitor-workspace-resource-id $prometheusId --grafana-resource-id $grafanaId
+#
+
+
+
+
+
+
+
+
+
+

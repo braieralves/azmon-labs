@@ -41,7 +41,7 @@ module "network" {
   my_ip               = local.my_ip
 }
 
-
+/*
 module "vmss_windows" {
   source              = "./modules/vmss_windows"
   resource_group_name = module.resource_group.name
@@ -54,7 +54,7 @@ module "vmss_windows" {
   admin_password      = var.admin_password
 }
 
-/*
+
 module "dcr_vmss" {
   source              = "./modules/dcr_vmss"
   resource_group_name = module.resource_group.name
