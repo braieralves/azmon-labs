@@ -54,7 +54,7 @@ module "vmss_windows" {
   admin_password      = var.admin_password
 }
 
-
+/*
 module "dcr_vmss" {
   source              = "./modules/dcr_vmss"
   resource_group_name = module.resource_group.name
@@ -63,7 +63,7 @@ module "dcr_vmss" {
   target_resource_id  = module.vmss_windows.vmss_id
 }
 
-
+*/
 
 
 # Network Interface for Ubuntu VM
