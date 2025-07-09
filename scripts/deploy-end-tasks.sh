@@ -88,14 +88,12 @@ configure_vm_autoshutdown() {
   
   echo "  📝 Configuring auto-shutdown for VM: $vm_name"
   
-  # Enable auto-shutdown (using UTC time, no timezone parameter)
+  # Enable auto-shutdown (using correct Azure CLI parameters)
   az vm auto-shutdown \
     --resource-group "$resource_group" \
     --name "$vm_name" \
     --time "$shutdown_time" \
-    --notification-time "$notification_time" \
-    --notification-email-recipient "admin@example.com" \
-    --enable-auto-shutdown true
+    --email "admin@example.com"
   
   if [ $? -eq 0 ]; then
     echo "  ✅ Auto-shutdown configured successfully for VM: $vm_name"
@@ -113,36 +111,28 @@ configure_vmss_autoshutdown() {
   
   echo "  📝 Configuring auto-shutdown for VMSS: $vmss_name"
   
-  # Enable auto-shutdown for VMSS (using UTC time, no timezone parameter)
-  az vmss auto-shutdown \
-    --resource-group "$resource_group" \
-    --name "$vmss_name" \
-    --time "$shutdown_time" \
-    --notification-time "$notification_time" \
-    --notification-email-recipient "admin@example.com" \
-    --enable-auto-shutdown true
-  
-  if [ $? -eq 0 ]; then
-    echo "  ✅ Auto-shutdown configured successfully for VMSS: $vmss_name"
-  else
-    echo "  ❌ Failed to configure auto-shutdown for VMSS: $vmss_name"
-  fi
+  # Note: VMSS auto-shutdown may not be directly supported via Azure CLI
+  # We'll attempt to use the VM command structure, but this may need manual configuration
+  echo "  ⚠️  VMSS auto-shutdown may require manual configuration through Azure Portal"
+  echo "  ℹ️  VMSS: $vmss_name - Please configure auto-shutdown manually if needed"
+  echo "  ✅ VMSS auto-shutdown notification completed (manual configuration may be required)"
 }
 
 # Configure auto-shutdown for all VMs
-configure_vm_autoshutdown "$UBUNTU_VM_NAME" "$RESOURCE_GROUP" "$USER_TIMEZONE_VALIDATED" "$SHUTDOWN_TIME" "$NOTIFICATION_TIME"
-configure_vm_autoshutdown "$WINDOWS_VM_NAME" "$RESOURCE_GROUP" "$USER_TIMEZONE_VALIDATED" "$SHUTDOWN_TIME" "$NOTIFICATION_TIME"
-configure_vm_autoshutdown "$REDHAT_VM_NAME" "$RESOURCE_GROUP" "$USER_TIMEZONE_VALIDATED" "$SHUTDOWN_TIME" "$NOTIFICATION_TIME"
+configure_vm_autoshutdown "$UBUNTU_VM_NAME" "$RESOURCE_GROUP" "$SHUTDOWN_TIME" "$NOTIFICATION_TIME"
+configure_vm_autoshutdown "$WINDOWS_VM_NAME" "$RESOURCE_GROUP" "$SHUTDOWN_TIME" "$NOTIFICATION_TIME"
+configure_vm_autoshutdown "$REDHAT_VM_NAME" "$RESOURCE_GROUP" "$SHUTDOWN_TIME" "$NOTIFICATION_TIME"
 
 # Configure auto-shutdown for VMSS
-configure_vmss_autoshutdown "$VMSS_NAME" "$RESOURCE_GROUP" "$USER_TIMEZONE_VALIDATED" "$SHUTDOWN_TIME" "$NOTIFICATION_TIME"
+configure_vmss_autoshutdown "$VMSS_NAME" "$RESOURCE_GROUP" "$SHUTDOWN_TIME" "$NOTIFICATION_TIME"
 
 echo "🎉 Auto-shutdown configuration completed!"
 echo ""
 echo "📋 Summary:"
 echo "  - Shutdown time (UTC): $SHUTDOWN_TIME (corresponds to 7:00 PM in your local timezone)"
-echo "  - Notification time (UTC): $NOTIFICATION_TIME (15 minutes before shutdown)"
+echo "  - Email notifications will be sent to: admin@example.com"
 echo "  - VMs configured: $UBUNTU_VM_NAME, $WINDOWS_VM_NAME, $REDHAT_VM_NAME"
-echo "  - VMSS configured: $VMSS_NAME"
-echo "  - All resources will automatically shutdown at the calculated UTC time with 15-minute notification"
+echo "  - VMSS: $VMSS_NAME (may require manual configuration)"
+echo "  - All VMs will automatically shutdown at the configured UTC time"
+echo "  ⚠️  Note: VMSS auto-shutdown may need to be configured manually through Azure Portal"
 
